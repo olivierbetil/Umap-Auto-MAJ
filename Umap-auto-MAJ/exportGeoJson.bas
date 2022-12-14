@@ -1,7 +1,7 @@
 Attribute VB_Name = "exportGeoJson"
 '****************************************************************************************************
 'file: exportGeoJson.bas
-'@brief: Programme pour mettre à jour le carte Umap présente dans l'excel selon le contenu de l'excel
+'@brief: Programme pour mettre Ã  jour le carte Umap prÃ©sente dans l'excel selon le contenu de l'excel
 '@author: Betil Olivier
 'version: v1.0
 'date: 06/12/2022
@@ -13,12 +13,13 @@ Sub GEOJSON()
     'on choisis le tableur principal
     Sheets("Tabelle1").Select
     
-    'Fonction pour mettre à jour le driver pour Chrome si besoin
+    'Fonction pour mettre Ã  jour le driver pour Chrome si besoin
     With New SeleniumWebDriverUpdate
         .UpdateDriver (Chrome)
     End With
     
-    'création d'un objet qui va représenter le fichier qu'on enregistrera (et on commence à écrire dedans)
+    'crÃ©ation d'un objet qui va reprÃ©senter le fichier qu'on enregistrera (et on commence Ã  Ã©crire dedans)
+        Dim objStream As ADODB.Stream
     Set objStream = CreateObject("ADODB.Stream")
     objStream.Charset = "utf-8"
     objStream.Open
@@ -26,7 +27,7 @@ Sub GEOJSON()
     objStream.WriteText "  ""type"": ""FeatureCollection""," & vbLf
     objStream.WriteText "  ""features"": [" & vbLf
     
-    'récupere le nombre de données à gérer
+    'rÃ©cupere le nombre de donnÃ©es Ã  gÃ©rer
     Dim intStop As Integer
     Dim nbLignes As Integer
     nbLignes = 6
@@ -39,11 +40,11 @@ Sub GEOJSON()
     Loop
     nbLignes = nbLignes - 2
     
-    'si cases coordonnées vides, recherches des coords avec le nom de la ville/de l'élement
+    'si cases coordonnÃ©es vides, recherches des coords avec le nom de la ville/de l'Ã©lement
     intStop = 0
     recupCoord (nbLignes)
     
-    'boucle principale qui va remplir l'objet selon les règles du geoJson
+    'boucle principale qui va remplir l'objet selon les rÃ¨gles du geoJson
     Dim compteur As Integer
     compteur = 7
     Do While compteur <= nbLignes
@@ -99,17 +100,17 @@ Sub GEOJSON()
     objStream.WriteText "  ]" & vbLf
     objStream.WriteText "}"
     Dim error As Integer
-    'enregistrer l'objet en un fichier en geoJson dans le dossier téléchargements de l'utilisateur
+    'enregistrer l'objet en un fichier en geoJson dans le dossier tÃ©lÃ©chargements de l'utilisateur
     On Error Resume Next
     objStream.SaveToFile Environ$("USERPROFILE") & "\Downloads" & "\" & ActiveSheet.Name & ".geojson", adSaveCreateOverWrite
-    objStream.SaveToFile Environ$("USERPROFILE") & "\Téléchargements" & "\" & ActiveSheet.Name & ".geojson", adSaveCreateOverWrite
+    objStream.SaveToFile Environ$("USERPROFILE") & "\TÃ©lÃ©chargements" & "\" & ActiveSheet.Name & ".geojson", adSaveCreateOverWrite
     On Error GoTo 0
-    'fonction pour mettre à jour la carte Umap
+    'fonction pour mettre Ã  jour la carte Umap
     umapUpdate
     
-    'Supprime le fichier en geoJson crée auparavant
+    'Supprime le fichier en geoJson crÃ©e auparavant
     On Error Resume Next
     Kill Environ$("USERPROFILE") & "\Downloads" & "\" & ActiveSheet.Name & ".geojson"
-    Kill Environ$("USERPROFILE") & "\Téléchargements" & "\" & ActiveSheet.Name & ".geojson"
+    Kill Environ$("USERPROFILE") & "\TÃ©lÃ©chargements" & "\" & ActiveSheet.Name & ".geojson"
     On Error GoTo 0
 End Sub

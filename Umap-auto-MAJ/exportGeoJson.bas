@@ -19,7 +19,7 @@ Sub GEOJSON()
     End With
     
     'création d'un objet qui va représenter le fichier qu'on enregistrera (et on commence à écrire dedans)
-        Dim objStream As ADODB.Stream
+    Dim objStream As ADODB.Stream
     Set objStream = CreateObject("ADODB.Stream")
     objStream.Charset = "utf-8"
     objStream.Open
